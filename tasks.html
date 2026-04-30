@@ -1,0 +1,468 @@
+<!-- PAGE: tasks.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Tracker - Kashan's Portfolio</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .kanban-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .kanban-col {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            min-height: 400px;
+        }
+
+        /* Distinct column colors */
+        .col-todo {
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.06) 0%, rgba(255,255,255,0.5) 100%);
+            border-top: 4px solid #6366F1;
+        }
+        .col-inprogress {
+            background: linear-gradient(180deg, rgba(6, 182, 212, 0.06) 0%, rgba(255,255,255,0.5) 100%);
+            border-top: 4px solid #06B6D4;
+        }
+        .col-done {
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.06) 0%, rgba(255,255,255,0.5) 100%);
+            border-top: 4px solid #10B981;
+        }
+
+        .kanban-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            margin-bottom: 16px;
+            border-radius: 12px;
+        }
+
+        .col-todo .kanban-header {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.08));
+            border-bottom: none;
+        }
+        .col-inprogress .kanban-header {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(20, 184, 166, 0.08));
+            border-bottom: none;
+        }
+        .col-done .kanban-header {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.08));
+            border-bottom: none;
+        }
+
+        .kanban-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .col-todo .kanban-title { color: #4F46E5; }
+        .col-inprogress .kanban-title { color: #0891B2; }
+        .col-done .kanban-title { color: #059669; }
+
+        .kanban-count {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .col-todo .kanban-count { background: #EEF2FF; color: #4F46E5; }
+        .col-inprogress .kanban-count { background: #ECFEFF; color: #0891B2; }
+        .col-done .kanban-count { background: #ECFDF5; color: #059669; }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.05);
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-card);
+            border-left-color: var(--primary);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .task-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 1.05rem;
+            flex: 1;
+            padding-right: 12px;
+        }
+
+        .priority-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--bg-secondary);
+        }
+
+        .priority-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .priority-High .priority-dot { background: #EF4444; }
+        .priority-Medium .priority-dot { background: #F59E0B; }
+        .priority-Low .priority-dot { background: #10B981; }
+
+        .task-preview {
+            font-size: 0.85rem;
+            color: var(--text-medium);
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .task-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #9CA3AF;
+        }
+
+        .task-actions {
+            display: none;
+            gap: 8px;
+        }
+
+        .task-card:hover .task-actions {
+            display: flex;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-medium);
+            padding: 4px;
+            border-radius: 4px;
+        }
+        
+        .icon-btn:hover { background: var(--bg-secondary); color: var(--primary); }
+        .icon-btn.delete:hover { color: #EF4444; background: #FEE2E2; }
+
+        /* Mobile Tabs */
+        .mobile-tabs {
+            display: none;
+            gap: 12px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        .mobile-tab {
+            padding: 8px 20px;
+            border-radius: 24px;
+            background: white;
+            border: 1px solid var(--border-color);
+            white-space: nowrap;
+            font-weight: 500;
+        }
+        .mobile-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        @media (max-width: 1024px) {
+            .kanban-board {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .kanban-board {
+                grid-template-columns: 1fr;
+            }
+            .kanban-col {
+                display: none;
+            }
+            .kanban-col.active {
+                display: block;
+            }
+            .mobile-tabs {
+                display: flex;
+            }
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .task-card {
+                padding: 12px;
+            }
+        }
+
+        /* Task detail extras */
+        .task-links-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-link-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        .task-link-item a {
+            color: var(--primary);
+            text-decoration: none;
+            word-break: break-all;
+            flex: 1;
+        }
+        .task-link-item a:hover { text-decoration: underline; }
+        .task-link-item .remove-link {
+            cursor: pointer;
+            color: #EF4444;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .subtask-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        .subtask-item input[type='checkbox'] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+        .subtask-item .subtask-text {
+            flex: 1;
+        }
+        .subtask-item .subtask-text.done {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        .subtask-item .remove-subtask {
+            cursor: pointer;
+            color: #EF4444;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .task-deadline-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: #FEF3C7;
+            color: #92400E;
+        }
+        .task-deadline-badge.overdue {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+        .subtask-progress {
+            height: 4px;
+            background: #E5E7EB;
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        .subtask-progress-bar {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <div id="sidebar"></div>
+
+        <div class="main-wrapper">
+            <div id="topbar"></div>
+
+            <main class="content">
+                <div class="page-header stagger-in">
+                    <div>
+                        <h1 style="font-size:2rem; color:var(--text-dark); margin-bottom:4px;">Task Tracker</h1>
+                        <p style="color:var(--text-medium);">Manage and track all assigned work</p>
+                    </div>
+                    <button class="btn btn-primary manager-only" id="btn-add-main" onclick="openAddTaskModal()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                        Add Task
+                    </button>
+                </div>
+
+                <div class="mobile-tabs stagger-in">
+                    <button class="mobile-tab active" onclick="switchMobileTab('todo', event)">To Do</button>
+                    <button class="mobile-tab" onclick="switchMobileTab('inprogress', event)">In Progress</button>
+                    <button class="mobile-tab" onclick="switchMobileTab('done', event)">Done</button>
+                </div>
+
+                <div class="kanban-board stagger-in" id="kanban-board">
+                    <!-- Skeletons initially -->
+                    <div class="kanban-col col-todo active">
+                        <div class="kanban-header">
+                            <span class="kanban-title">To Do</span>
+                        </div>
+                        <div class="skeleton" style="height:100px; margin-bottom:12px; border-radius:12px;"></div>
+                        <div class="skeleton" style="height:100px; margin-bottom:12px; border-radius:12px;"></div>
+                    </div>
+                    <div class="kanban-col col-inprogress">
+                        <div class="kanban-header">
+                            <span class="kanban-title">In Progress</span>
+                        </div>
+                        <div class="skeleton" style="height:100px; margin-bottom:12px; border-radius:12px;"></div>
+                    </div>
+                    <div class="kanban-col col-done">
+                        <div class="kanban-header">
+                            <span class="kanban-title">Done</span>
+                        </div>
+                        <div class="skeleton" style="height:100px; margin-bottom:12px; border-radius:12px;"></div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Task Modal (Add/Edit) -->
+    <div class="modal-overlay" id="task-modal">
+        <div class="modal-content" style="max-width:640px;">
+            <button class="modal-close" onclick="closeModal('task-modal')">×</button>
+            <h2 style="margin-bottom: 24px;" id="task-modal-title">Task Details</h2>
+            
+            <form id="task-form">
+                <input type="hidden" id="task-id">
+                
+                <div class="input-group">
+                    <input type="text" id="task-title" placeholder="Task Title *" required style="padding-left:16px; font-size:1.1rem; font-weight:600;">
+                </div>
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+                    <div class="input-group">
+                        <label style="display:block; margin-bottom:6px; font-size:0.8rem; font-weight:600; color:var(--text-medium);">Priority</label>
+                        <select id="task-priority" style="padding-left:12px;">
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                    <div class="input-group" id="task-status-container">
+                        <label style="display:block; margin-bottom:6px; font-size:0.8rem; font-weight:600; color:var(--text-medium);">Status</label>
+                        <select id="task-status" style="padding-left:12px;">
+                            <option value="todo">To Do</option>
+                            <option value="inprogress">In Progress</option>
+                            <option value="done">Done</option>
+                        </select>
+                    </div>
+                    <div class="input-group" id="task-deadline-container">
+                        <label style="display:block; margin-bottom:6px; font-size:0.8rem; font-weight:600; color:var(--text-medium);">Deadline</label>
+                        <input type="date" id="task-deadline" style="padding-left:12px;">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label style="display:block; margin-bottom:6px; font-size:0.8rem; font-weight:600; color:var(--text-medium);">Assigned Date *</label>
+                    <input type="date" id="task-date" required style="padding-left:12px;">
+                </div>
+
+                <div class="input-group">
+                    <label style="display:block; margin-bottom:6px; font-size:0.8rem; font-weight:600; color:var(--text-medium);">Description / Notes</label>
+                    <textarea id="task-notes" placeholder="Detailed notes (optional)..." rows="4" style="padding:12px 16px;"></textarea>
+                </div>
+
+                <!-- Links Section -->
+                <div class="input-group" id="links-section">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <label style="font-size:0.8rem; font-weight:600; color:var(--text-medium);">🔗 Links</label>
+                        <button type="button" class="btn btn-outline" style="padding:4px 12px; font-size:0.75rem; border-radius:16px;" onclick="addLinkField()">+ Add Link</button>
+                    </div>
+                    <div id="task-links-container"></div>
+                </div>
+
+                <!-- Subtasks Section -->
+                <div class="input-group" id="subtasks-section">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <label style="font-size:0.8rem; font-weight:600; color:var(--text-medium);">☑ Sub-tasks</label>
+                        <button type="button" class="btn btn-outline" style="padding:4px 12px; font-size:0.75rem; border-radius:16px;" onclick="addSubtaskField()">+ Add Sub-task</button>
+                    </div>
+                    <div id="task-subtasks-container"></div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px; flex-wrap:wrap; gap:12px;">
+                    <div style="font-size:0.8rem; color:var(--text-medium);" id="task-meta"></div>
+                    <div style="display:flex; gap:12px;">
+                        <button type="button" class="btn btn-outline manager-only" style="border-color:#EF4444; color:#EF4444; display:none;" id="btn-delete-task" onclick="deleteTaskFromModal()">Delete</button>
+                        <button type="submit" class="btn btn-primary" id="btn-save-task">Save Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Scripts -->
+    <script src="js/firebase-init.js?v=4"></script>
+    <script src="js/auth.js?v=4"></script>
+    <script src="js/tasks.js?v=6"></script>
+</body>
+</html>

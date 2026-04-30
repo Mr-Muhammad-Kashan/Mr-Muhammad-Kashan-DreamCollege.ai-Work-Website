@@ -1,0 +1,235 @@
+<!-- PAGE: login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Kashan's Portfolio</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        body {
+            background: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(124, 58, 237, 0.15);
+            padding: 48px;
+            width: 100%;
+            max-width: 440px;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            display: block;
+            border-radius: 50%;
+            object-fit: contain;
+            animation: pulse-glow 2s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 rgba(124, 58, 237, 0); }
+            100% { box-shadow: 0 0 20px var(--primary-glow), 0 0 40px var(--primary-glow); }
+        }
+
+        .login-title {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            color: var(--text-medium);
+            margin-bottom: 32px;
+            font-weight: 500;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            margin-top: 12px;
+        }
+
+        .spinner {
+            animation: rotate 2s linear infinite;
+            width: 24px;
+            height: 24px;
+            display: none;
+        }
+
+        .spinner circle {
+            stroke: white;
+            stroke-width: 4;
+            stroke-dasharray: 1, 200;
+            stroke-dashoffset: 0;
+            animation: dash 1.5s ease-in-out infinite;
+            stroke-linecap: round;
+        }
+
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        @keyframes dash {
+            0% { stroke-dasharray: 1, 200; stroke-dashoffset: 0; }
+            50% { stroke-dasharray: 90, 200; stroke-dashoffset: -35px; }
+            100% { stroke-dasharray: 90, 200; stroke-dashoffset: -124px; }
+        }
+
+        .error-message {
+            color: #EF4444;
+            background: #FEE2E2;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 0.9rem;
+            display: none;
+            font-weight: 500;
+        }
+
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 28px;
+                border-radius: 22px;
+            }
+            .login-title {
+                font-size: 1.6rem;
+            }
+            .login-subtitle {
+                margin-bottom: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card stagger-in">
+        <img src="resources/logos/logo1.png" alt="Logo" class="login-logo" onerror="this.src='https://via.placeholder.com/80?text=Logo'">
+        <h1 class="login-title text-gradient">Kashan's Portfolio</h1>
+        <div class="login-subtitle">Welcome to my work profile</div>
+
+        <form id="login-form">
+            <div class="input-group">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                <input type="email" id="email" placeholder="Email Address" required>
+            </div>
+            <div class="input-group">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary login-btn" id="login-btn">
+                <span class="btn-text">Sign In</span>
+                <svg class="spinner" viewBox="25 25 50 50">
+                    <circle cx="50" cy="50" r="20" fill="none"></circle>
+                </svg>
+            </button>
+        </form>
+
+        <div class="error-message" id="error-msg"></div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Scripts -->
+    <script src="js/firebase-init.js?v=4"></script>
+    <script src="js/auth.js?v=4"></script>
+
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const loginBtn = document.getElementById('login-btn');
+        const btnText = loginBtn.querySelector('.btn-text');
+        const spinner = loginBtn.querySelector('.spinner');
+        const errorMsg = document.getElementById('error-msg');
+        const loginCard = document.querySelector('.login-card');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            // Whitelist: Only these two users are authorized
+            const ALLOWED_EMAILS = [
+                'mr.muhammad.kashan.tariq@gmail.com',
+                'julialiang2015@gmail.com'
+            ];
+
+            if (!ALLOWED_EMAILS.includes(email.toLowerCase())) {
+                errorMsg.textContent = 'Error 4.4 — Incorrect credentials. Please check your email and password.';
+                errorMsg.style.display = 'block';
+                loginCard.classList.remove('shake');
+                void loginCard.offsetWidth;
+                loginCard.classList.add('shake');
+                return;
+            }
+
+            // Loading state
+            btnText.style.display = 'none';
+            spinner.style.display = 'block';
+            loginBtn.style.pointerEvents = 'none';
+            errorMsg.style.display = 'none';
+            errorMsg.classList.remove('shake');
+
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                // Auth state listener in auth.js will handle redirect
+            } catch (error) {
+                // Reset state
+                btnText.style.display = 'block';
+                spinner.style.display = 'none';
+                loginBtn.style.pointerEvents = 'all';
+                
+                // User-friendly error messages
+                let msg = 'Error 4.4 — Incorrect credentials. Please check your email and password.';
+                if (error.code === 'auth/too-many-requests') {
+                    msg = 'Too many failed attempts. Please try again later.';
+                } else if (error.code === 'auth/invalid-email') {
+                    msg = 'Invalid email format. Please enter a valid email address.';
+                }
+                
+                errorMsg.textContent = msg;
+                errorMsg.style.display = 'block';
+                
+                // Trigger shake
+                loginCard.classList.remove('shake');
+                void loginCard.offsetWidth;
+                loginCard.classList.add('shake');
+            }
+        });
+    </script>
+</body>
+</html>

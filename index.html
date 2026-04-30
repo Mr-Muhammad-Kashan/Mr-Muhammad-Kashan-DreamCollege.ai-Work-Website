@@ -1,0 +1,487 @@
+<!-- PAGE: index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Kashan's Portfolio</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        .hero-section {
+            background: var(--gradient-main);
+            border-radius: 24px;
+            padding: 48px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 32px;
+            box-shadow: 0 20px 40px rgba(124, 58, 237, 0.2);
+            overflow: hidden;
+        }
+
+        .hero-avatar-container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .hero-avatar {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            padding: 8px;
+            background: conic-gradient(from 0deg, #7C3AED, #EC4899, #06B6D4, #7C3AED);
+            margin: 0 auto 20px;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .hero-avatar:hover {
+            transform: scale(1.08) translateY(-8px);
+            box-shadow: 0 20px 40px rgba(124, 58, 237, 0.3);
+        }
+
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .hero-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: white;
+            object-fit: cover;
+            border: 4px solid var(--bg-main);
+        }
+
+        .hero-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .hero-role {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .hero-content {
+            z-index: 1;
+            flex: 1;
+        }
+
+        .hero-greeting {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .hero-tagline {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 24px;
+        }
+
+        .hero-date {
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .stat-info h3 {
+            font-size: 2rem;
+            margin-bottom: 4px;
+            color: var(--text-dark);
+        }
+
+        .stat-info p {
+            color: var(--text-medium);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            color: var(--text-dark);
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 10px;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 24px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -24px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px var(--primary-light);
+        }
+
+        .timeline-content {
+            background: var(--bg-secondary);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .task-card-compact {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .task-card-compact:hover {
+            transform: translateX(4px);
+            border-color: var(--primary-light);
+        }
+
+        .projects-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .project-card-mini {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card-mini img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            background: #eee;
+        }
+
+        @media (max-width: 1024px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            }
+            .projects-row {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+                padding: 28px 20px;
+                gap: 20px;
+            }
+            .hero-greeting {
+                font-size: 1.6rem;
+            }
+            .hero-tagline {
+                font-size: 1rem;
+            }
+            .hero-avatar {
+                width: 140px;
+                height: 140px;
+            }
+            .hero-name {
+                font-size: 22px;
+            }
+            .hero-date {
+                font-size: 1rem;
+                padding: 6px 14px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .stat-info h3 {
+                font-size: 1.5rem;
+            }
+            .stat-info p {
+                font-size: 0.8rem;
+            }
+            .projects-row {
+                grid-template-columns: 1fr;
+            }
+            #manager-shortcuts {
+                flex-direction: column;
+                align-items: center;
+            }
+            .btn-manager {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section {
+                padding: 20px 14px;
+            }
+            .hero-greeting {
+                font-size: 1.3rem;
+            }
+            .hero-avatar {
+                width: 110px;
+                height: 110px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .stat-card {
+                padding: 14px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar injected here -->
+        <div id="sidebar"></div>
+
+        <div class="main-wrapper">
+            <!-- Topbar injected here -->
+            <div id="topbar"></div>
+
+            <main class="content">
+                <div class="hero-section stagger-in">
+                    <div class="hero-avatar-container">
+                        <div class="hero-avatar">
+                            <img id="hero-avatar-img" src="resources/Profile Picture/me.jpg" alt="Profile">
+                        </div>
+                        <div class="hero-name" id="hero-name-display">Muhammad Kashan</div>
+                        <div class="hero-role" id="hero-role-display">Software Engineer</div>
+                    </div>
+                    <div class="hero-content">
+                        <h1 class="hero-greeting" id="dynamic-greeting">Good Morning, Kashan! 👋</h1>
+                        <p class="hero-tagline">Here's your workspace overview</p>
+                        <div class="hero-date" id="hero-date">October 24, 2023</div>
+                        
+                        <!-- Manager Shortcuts (Hidden by default) -->
+                        <style>
+                            .btn-manager {
+                                background: rgba(255, 255, 255, 0.15);
+                                border: 1px solid rgba(255, 255, 255, 0.3);
+                                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                                border-radius: 12px;
+                                padding: 10px 20px;
+                                font-size: 0.95rem;
+                                font-weight: 600;
+                                color: white;
+                                transition: transform 0.2s, background 0.2s;
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                            }
+                            .btn-manager:hover {
+                                transform: translateY(-2px);
+                                background: rgba(255, 255, 255, 0.25);
+                            }
+                        </style>
+                        <div id="manager-shortcuts" style="display: none; margin-top: 24px; gap: 16px; flex-wrap: wrap;">
+                            <button onclick="window.location.href='tasks.html'" class="btn-manager">
+                                <span style="font-size:1.2rem;">📝</span> Assign Tasks to Him
+                            </button>
+                            <button onclick="window.location.href='worklog.html'" class="btn-manager">
+                                <span style="font-size:1.2rem;">⏱️</span> Check His Work Log
+                            </button>
+                            <button onclick="window.location.href='projects.html'" class="btn-manager">
+                                <span style="font-size:1.2rem;">📁</span> View His Projects
+                            </button>
+                            <button onclick="window.location.href='monthly-report.html'" class="btn-manager">
+                                <span style="font-size:1.2rem;">📊</span> Check Monthly Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="card stat-card stagger-in" style="border-left-color: var(--primary);">
+                        <div class="stat-icon" style="background: var(--gradient-main);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <h3 class="counter" id="stat-projects" data-target="0">0</h3>
+                            <p>Total Projects</p>
+                        </div>
+                    </div>
+                    <div class="card stat-card stagger-in" style="border-left-color: var(--accent);">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #EC4899, #F43F5E);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <h3 class="counter" id="stat-tasks" data-target="0">0</h3>
+                            <p>Pending Tasks</p>
+                        </div>
+                    </div>
+                    <div class="card stat-card stagger-in" style="border-left-color: var(--accent-secondary);">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #06B6D4, #0EA5E9);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <h3 class="counter" id="stat-hours" data-target="0">0</h3>
+                            <p id="stat-hours-label">Hours This Month</p>
+                        </div>
+                    </div>
+                    <div class="card stat-card stagger-in" style="border-left-color: #F59E0B;">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #F59E0B, #D97706);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <h3 class="counter" id="stat-today" data-target="0">0</h3>
+                            <p>Hours Today</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="two-column">
+                    <div class="card section-card section-worklog stagger-in">
+                        <div class="section-header">
+                            <h2 class="section-title">Recent Work Log</h2>
+                            <a href="worklog.html" class="view-all">View All</a>
+                        </div>
+                        <div class="timeline" id="recent-worklog">
+                            <!-- Injected by JS -->
+                            <div class="skeleton" style="height: 60px; margin-bottom: 16px;"></div>
+                            <div class="skeleton" style="height: 60px; margin-bottom: 16px;"></div>
+                            <div class="skeleton" style="height: 60px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="card section-card section-tasks stagger-in">
+                        <div class="section-header">
+                            <h2 class="section-title">Active Tasks</h2>
+                            <a href="tasks.html" class="view-all">View All</a>
+                        </div>
+                        <div id="recent-tasks">
+                            <!-- Injected by JS -->
+                            <div class="skeleton" style="height: 60px; margin-bottom: 16px;"></div>
+                            <div class="skeleton" style="height: 60px; margin-bottom: 16px;"></div>
+                            <div class="skeleton" style="height: 60px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card section-card section-projects stagger-in">
+                    <div class="section-header">
+                        <h2 class="section-title">Recent Projects</h2>
+                        <a href="projects.html" class="view-all">View All</a>
+                    </div>
+                    <div class="projects-row" id="recent-projects">
+                        <!-- Injected by JS -->
+                        <div class="skeleton" style="height: 180px;"></div>
+                        <div class="skeleton" style="height: 180px;"></div>
+                        <div class="skeleton" style="height: 180px;"></div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Scripts -->
+    <script src="js/firebase-init.js?v=4"></script>
+    <script src="js/auth.js?v=4"></script>
+    <script src="js/dashboard.js?v=4"></script>
+</body>
+</html>

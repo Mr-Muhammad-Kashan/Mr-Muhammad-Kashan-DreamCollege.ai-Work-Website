@@ -1,0 +1,679 @@
+<!-- PAGE: projects.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Portfolio - Kashan's Portfolio</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-utilities.min.css">
+    
+    <style>
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .page-header p {
+            color: var(--text-medium);
+            font-size: 1rem;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .filter-pill {
+            padding: 8px 20px;
+            border-radius: 24px;
+            background: white;
+            border: 1px solid var(--border-color);
+            color: var(--text-medium);
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .filter-pill:hover {
+            background: var(--bg-secondary);
+        }
+
+        .filter-pill.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-purple);
+        }
+
+        .project-thumb {
+            position: relative;
+            height: 180px;
+            background: linear-gradient(135deg, #F5F3FF, #EDE9FE);
+            border-radius: 16px 16px 0 0;
+            overflow: hidden;
+        }
+
+        .project-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover .project-thumb img {
+            transform: scale(1.05);
+        }
+
+        .project-status-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 2;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .project-body {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-name {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .project-desc {
+            font-size: 0.9rem;
+            color: var(--text-medium);
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .project-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .project-detail-grid {
+            min-width: 0;
+        }
+
+        #detail-title {
+            max-width: 100%;
+            min-width: 0;
+        }
+
+        #detail-badge {
+            flex-shrink: 0;
+        }
+
+        #detail-desc {
+            min-width: 0;
+            overflow-wrap: break-word;
+        }
+
+        .project-date {
+            font-size: 0.8rem;
+            color: #9CA3AF;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-medium);
+            padding: 6px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-btn:hover {
+            background: var(--bg-secondary);
+            color: var(--primary);
+        }
+
+        .icon-btn.delete:hover {
+            color: #EF4444;
+            background: #FEE2E2;
+        }
+
+        /* Modal specific styles */
+        .modal-tabs {
+            display: flex;
+            gap: 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin: 24px 0;
+        }
+
+        .modal-tab {
+            padding: 12px 0;
+            font-weight: 500;
+            color: var(--text-medium);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .modal-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeUp 0.3s ease;
+        }
+
+        .version-list {
+            list-style: none;
+        }
+
+        .version-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .version-item a {
+            color: var(--primary);
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .version-item a:hover {
+            text-decoration: underline;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 16px;
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Fix version items - prevent text cutoff */
+        .version-item {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            padding: 14px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            min-width: 0;
+        }
+
+        .version-item strong {
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        .version-head {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        .version-title {
+            min-width: 0;
+        }
+
+        .version-label-text {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-break: break-word;
+            line-height: 1.35;
+        }
+
+        .version-date {
+            font-size: 0.82rem;
+            color: var(--text-medium);
+        }
+
+        .version-actions-row {
+            margin-top: 10px;
+        }
+
+        .version-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .version-actions button {
+            background: none;
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: var(--text-medium);
+            white-space: nowrap;
+        }
+
+        .version-actions button:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .version-remarks {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .remark-item {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            word-break: break-word;
+        }
+        
+        .remark-item strong {
+            color: var(--primary);
+        }
+
+        .add-remark-box {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .add-remark-box input {
+            flex: 1;
+            min-width: 0;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 1024px) {
+            .project-detail-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .filter-bar {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 8px;
+            }
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .project-thumb {
+                height: 160px;
+            }
+            .project-footer {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            /* Detail modal mobile */
+            .modal-content {
+                padding: 0 !important;
+                border-radius: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                max-height: 90vh !important;
+                height: 90vh !important;
+            }
+            .project-detail-grid {
+                grid-template-columns: 1fr !important;
+                padding: 16px !important;
+                gap: 20px !important;
+            }
+            /* Fix cover area */
+            .modal-content > div:first-of-type {
+                height: 160px !important;
+            }
+            .modal-content > div:first-of-type h2 {
+                font-size: 1.6rem !important;
+            }
+            .modal-content > div:first-of-type > div:last-child {
+                padding: 20px 16px 14px !important;
+            }
+            #detail-title {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            #detail-desc {
+                font-size: 1rem !important;
+                display: -webkit-box;
+                -webkit-line-clamp: 4;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            /* Version items alignment */
+            .version-actions {
+                width: 100%;
+                justify-content: flex-start;
+                gap: 6px;
+            }
+            .version-actions button {
+                padding: 5px 10px;
+                font-size: 0.78rem;
+            }
+            /* Remark box */
+            .add-remark-box {
+                flex-direction: column;
+            }
+            .add-remark-box input {
+                width: 100%;
+            }
+            /* Gallery */
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px !important;
+            }
+            /* Notes textarea */
+            #detail-notes {
+                height: 120px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .filter-pill {
+                padding: 6px 14px;
+                font-size: 0.85rem;
+            }
+            .project-thumb {
+                height: 140px;
+            }
+            .modal-content > div:first-of-type {
+                height: 120px !important;
+            }
+            .modal-content > div:first-of-type h2 {
+                font-size: 1.3rem !important;
+            }
+            .project-detail-grid {
+                padding: 12px !important;
+                gap: 16px !important;
+            }
+            #detail-desc {
+                font-size: 0.95rem !important;
+                -webkit-line-clamp: 3;
+            }
+            .gallery-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <div id="sidebar"></div>
+
+        <div class="main-wrapper">
+            <div id="topbar"></div>
+
+            <main class="content">
+                <div class="page-header stagger-in">
+                    <div>
+                        <h1>Website Portfolio</h1>
+                        <p>All versions, links, and project details</p>
+                    </div>
+                    <button class="btn btn-primary admin-only" onclick="openAddModal()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                        Add New Project
+                    </button>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px;">
+                    <div class="filter-bar stagger-in" id="filter-bar" style="margin-bottom: 0;">
+                        <button class="filter-pill active" data-filter="All">All</button>
+                        <button class="filter-pill" data-filter="Planning 📝">Planning 📝</button>
+                        <button class="filter-pill" data-filter="In Progress ⏳">In Progress ⏳</button>
+                        <button class="filter-pill" data-filter="Completed ✅">Completed ✅</button>
+                        <button class="filter-pill" data-filter="Live 🚀">Live 🚀</button>
+                    </div>
+                    
+                    <div class="search-bar stagger-in" style="flex: 1; max-width: 300px; display: flex; align-items: center; background: white; border-radius: 24px; padding: 4px 16px; border: 1px solid var(--border-color);">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--text-medium)"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <input type="text" id="project-search" placeholder="Search projects..." style="border: none; outline: none; background: transparent; padding: 8px; width: 100%; font-family: 'Inter';" onkeyup="renderProjects()">
+                    </div>
+                </div>
+
+                <div class="projects-grid" id="projects-grid">
+                    <!-- Skeletons -->
+                    <div class="skeleton" style="height: 350px; border-radius: 20px;"></div>
+                    <div class="skeleton" style="height: 350px; border-radius: 20px;"></div>
+                    <div class="skeleton" style="height: 350px; border-radius: 20px;"></div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Add/Edit Project Modal -->
+    <div class="modal-overlay" id="add-project-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('add-project-modal')">×</button>
+            <h2 style="margin-bottom: 24px;" id="add-modal-title">Add New Project</h2>
+            <form id="project-form">
+                <input type="hidden" id="project-id">
+                <div class="input-group">
+                    <input type="text" id="project-name" placeholder="Project Name" required>
+                </div>
+                <div class="input-group">
+                    <textarea id="project-desc" placeholder="Short Description" rows="3" required></textarea>
+                </div>
+                <div class="input-group">
+                    <select id="project-status">
+                        <option value="Planning 📝">Planning 📝</option>
+                        <option value="In Progress ⏳">In Progress ⏳</option>
+                        <option value="Completed ✅">Completed ✅</option>
+                        <option value="Live 🚀">Live 🚀</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <input type="url" id="project-thumb" placeholder="Thumbnail Image URL (Optional)">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%">Save Project</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Project Detail Modal -->
+    <div class="modal-overlay" id="detail-modal">
+        <div class="modal-content" style="max-width: 1200px; width: 95%; max-height: 90vh; overflow-y: auto; padding: 0; display: flex; flex-direction: column; background: var(--bg-main);">
+            <button class="modal-close" onclick="closeModal('detail-modal')" style="z-index: 10; background: white; border-radius: 50%; width: 36px; height: 36px; top: 16px; right: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">×</button>
+            
+            <!-- Header (Cover Image & Info) -->
+            <div style="position: relative; height: 250px; background: #eee;">
+                <img id="detail-cover" src="" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;" onerror="this.style.display='none'">
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: 40px 32px 24px;">
+                    <div style="display: flex; gap: 16px; align-items: flex-end;">
+                        <h2 id="detail-title" style="font-size: 2.5rem; margin: 0; color: white; text-shadow: 0 2px 8px rgba(0,0,0,0.5);">Project Name</h2>
+                        <span id="detail-badge" style="margin-bottom: 8px;"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="project-detail-grid" style="padding: 32px; display: grid; grid-template-columns: 2fr 1fr; gap: 32px;">
+                
+                <!-- Left Column (Notes + Masonry) -->
+                <div style="display: flex; flex-direction: column; gap: 32px; min-width:0;">
+                    <!-- Description -->
+                    <p id="detail-desc" style="font-size: 1.1rem; color: var(--text-dark); line-height: 1.6;"></p>
+                    
+                    <!-- Notes Section -->
+                    <div class="card" style="padding: 24px; border-radius: 16px; background: white; box-shadow: var(--shadow-card);">
+                        <h3 style="margin-bottom: 16px; font-size: 1.2rem;">Notes & Drivers</h3>
+                        <textarea id="detail-notes" style="width: 100%; height: 200px; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); font-family: 'Inter'; font-size: 0.95rem; resize: vertical;" placeholder="Add comprehensive notes..."></textarea>
+                        <div style="text-align: right; margin-top: 16px;" class="admin-only">
+                            <button class="btn btn-primary" onclick="saveNotes()">Save Notes</button>
+                        </div>
+                    </div>
+
+                    <!-- Gallery Section -->
+                    <div class="card" style="padding: 24px; border-radius: 16px; background: white; box-shadow: var(--shadow-card);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <h3 style="margin: 0; font-size: 1.2rem;">Screenshots</h3>
+                            <button class="btn btn-outline admin-only" style="padding: 6px 16px; font-size: 0.85rem;" onclick="openAddScreenshot()">+ Add Image</button>
+                        </div>
+
+                        <!-- Inner form -->
+                        <div id="add-img-form" style="display:none; background: var(--bg-secondary); padding: 16px; border-radius: 12px; margin-bottom: 16px;" class="admin-only">
+                            <div style="display: flex; gap: 12px;">
+                                <input type="url" id="img-url" placeholder="Image URL (Unsplash or direct link)" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <button class="btn btn-primary" onclick="saveScreenshot()">Save Image</button>
+                                <button class="btn btn-outline" onclick="document.getElementById('add-img-form').style.display='none'">Cancel</button>
+                            </div>
+                        </div>
+
+                        <div class="gallery-grid" id="detail-gallery" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;"></div>
+                    </div>
+                </div>
+
+                <!-- Right Column (Versions & Links) -->
+                <div style="min-width:0; overflow:hidden;">
+                    <div class="card" style="padding: 24px; border-radius: 16px; background: white; box-shadow: var(--shadow-card); min-width:0; overflow:hidden;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                            <h3 style="margin: 0; font-size: 1.2rem;">Versions & Links</h3>
+                            <button class="icon-btn admin-only" style="background: var(--primary-light); color: var(--primary);" onclick="openAddVersion()" title="Add Version">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                            </button>
+                        </div>
+
+                        <div id="add-version-form" style="display:none; background: var(--bg-secondary); padding: 16px; border-radius: 12px; margin-bottom: 16px;" class="admin-only">
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                <input type="text" id="v-label" placeholder="Label (e.g. v1 - Initial Design)" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <input type="url" id="v-url" placeholder="URL (Figma, Drive, Live)" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-primary" style="flex: 1;" onclick="saveVersion()">Save</button>
+                                    <button class="btn btn-outline" style="flex: 1;" onclick="document.getElementById('add-version-form').style.display='none'">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="versions-empty-state" style="display: none; color: var(--text-medium); font-style: italic;">No versions added yet.</div>
+                        <div id="latest-version-container" style="display: none; margin-bottom: 24px;">
+                            <h4 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--primary-light); padding-bottom: 4px; display: inline-block;">⭐ Latest Version</h4>
+                            <ul class="version-list" id="detail-latest-version" style="margin: 0; padding: 0;"></ul>
+                        </div>
+                        
+                        <div id="older-versions-container" style="display: none;">
+                            <h4 style="font-size: 0.95rem; color: var(--text-medium); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Older Versions</h4>
+                            <ul class="version-list" id="detail-older-versions" style="margin: 0; padding: 0;"></ul>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="modal-overlay" id="lightbox-modal" style="z-index: 2000; background:rgba(0,0,0,0.9)" onclick="closeModal('lightbox-modal')">
+        <button class="modal-close" style="color:white; right:40px; top:40px; font-size:3rem;">×</button>
+        <img id="lightbox-img" src="" style="max-width:90vw; max-height:90vh; object-fit:contain;">
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Scripts -->
+    <script src="js/firebase-init.js?v=4"></script>
+    <script src="js/auth.js?v=4"></script>
+    <script src="js/projects.js?v=6"></script>
+</body>
+</html>

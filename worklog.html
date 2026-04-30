@@ -1,0 +1,543 @@
+<!-- PAGE: worklog.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Log - Kashan's Portfolio</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .page-header p {
+            color: var(--text-medium);
+        }
+
+        /* Time Tracker */
+        .time-tracker {
+            background: linear-gradient(135deg, #7C3AED, #A78BFA);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.2);
+            position: relative;
+            margin-bottom: 32px;
+            overflow: hidden;
+        }
+
+        .time-tracker::before {
+            content: none;
+        }
+
+        .tracker-clock {
+            font-size: 4.5rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: #ffffff;
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+            margin-bottom: 8px;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .tracker-date {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 32px;
+            font-weight: 500;
+        }
+
+        .tracker-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .btn-tracker {
+            height: 52px;
+            font-size: 1rem;
+            min-width: 160px;
+            border-radius: 16px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            will-change: box-shadow;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+        }
+        
+        .btn-start:not(:disabled) {
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .btn-break {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            color: white;
+        }
+
+        .btn-break:not(:disabled) {
+            animation: pulse-amber 2s infinite;
+        }
+
+        @keyframes pulse-amber {
+            0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(245, 158, 11, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+        }
+
+        .btn-resume {
+            background: linear-gradient(135deg, #06B6D4, #0891B2);
+            color: white;
+        }
+
+        .btn-resume:not(:disabled) {
+            animation: pulse-cyan 2s infinite;
+        }
+
+        @keyframes pulse-cyan {
+            0% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(6, 182, 212, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .btn-start:not(:disabled),
+            .btn-break:not(:disabled),
+            .btn-resume:not(:disabled) {
+                animation: none;
+            }
+        }
+
+        .btn-end {
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+            color: white;
+        }
+
+        .btn-tracker:disabled {
+            background: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.4);
+            cursor: not-allowed;
+            animation: none;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .time-info-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .time-info-pill {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            font-variant-numeric: tabular-nums;
+            opacity: 0;
+            background: rgba(0,0,0,0.2);
+            padding: 8px 18px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .time-info-pill.active {
+            opacity: 1;
+        }
+
+        .time-info-pill .pill-icon {
+            font-size: 1.1rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-card p {
+            font-size: 0.9rem;
+            color: var(--text-medium);
+            font-weight: 500;
+        }
+
+        /* Chart */
+        .chart-container {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 32px;
+        }
+
+        .chart-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--text-dark);
+        }
+
+        canvas#hoursChart {
+            width: 100%;
+            height: 300px;
+            display: block;
+        }
+
+        /* Table */
+        .table-container {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--bg-secondary);
+            padding: 14px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-medium);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) td {
+            background: #FAFAFA;
+        }
+
+        .hours-high { color: #F59E0B; font-weight: 600; }
+        .hours-good { color: #10B981; font-weight: 600; }
+        .hours-low { color: #EF4444; font-weight: 600; }
+
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--text-medium);
+        }
+
+        /* Mobile for worklog */
+        @media (max-width: 768px) {
+            .time-tracker {
+                padding: 24px 16px;
+                border-radius: 18px;
+            }
+            .tracker-clock {
+                font-size: 3rem;
+            }
+            .tracker-date {
+                font-size: 1rem;
+                margin-bottom: 20px;
+            }
+            .tracker-btns {
+                gap: 8px;
+            }
+            .btn-tracker {
+                min-width: 120px;
+                height: 46px;
+                font-size: 0.85rem;
+            }
+            .time-info-row {
+                gap: 8px;
+            }
+            .time-info-pill {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .stat-card {
+                padding: 16px;
+            }
+            .stat-card h3 {
+                font-size: 1.8rem;
+            }
+            .stat-card p {
+                font-size: 0.8rem;
+            }
+            .chart-container {
+                padding: 16px;
+            }
+            .table-header {
+                padding: 14px 16px;
+            }
+            th, td {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+            }
+            .table-actions-group {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            .table-actions-group .btn {
+                font-size: 0.75rem !important;
+                padding: 5px 10px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tracker-clock {
+                font-size: 2.5rem;
+            }
+            .btn-tracker {
+                min-width: 100px;
+                height: 42px;
+                font-size: 0.8rem;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <div id="sidebar"></div>
+
+        <div class="main-wrapper">
+            <div id="topbar"></div>
+
+            <main class="content">
+                <div class="page-header stagger-in">
+                    <h1>Work Log</h1>
+                    <p>Track your daily hours and productivity</p>
+                </div>
+
+                <div class="time-tracker stagger-in admin-only" id="time-tracker">
+                    <div class="tracker-clock" id="tracker-clock">00:00:00</div>
+                    <div class="tracker-date" id="tracker-date">Loading...</div>
+                    <div class="tracker-btns">
+                        <button class="btn btn-tracker btn-start" id="btn-start" onclick="startDay()">▶ Start Day</button>
+                        <button class="btn btn-tracker btn-break" id="btn-break" onclick="toggleBreak()" disabled>☕ Take Break</button>
+                        <button class="btn btn-tracker btn-end" id="btn-end" onclick="endDay()" disabled>⏹ End Day</button>
+                    </div>
+                    <div class="time-info-row">
+                        <div class="time-info-pill" id="elapsed-time">
+                            <span class="pill-icon">⏱️</span>
+                            <span>Elapsed: 00:00:00</span>
+                        </div>
+                        <div class="time-info-pill" id="break-time">
+                            <span class="pill-icon">☕</span>
+                            <span>Break: 00:00:00</span>
+                        </div>
+                        <div class="time-info-pill" id="net-time">
+                            <span class="pill-icon">💼</span>
+                            <span>Net Work: 00:00:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid stagger-in">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #6366F1, #8B5CF6); border:none; box-shadow: 0 10px 20px rgba(99,102,241,0.2);">
+                        <h3 id="stat-week-hrs" style="color:white; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">0</h3>
+                        <p style="color:rgba(255,255,255,0.9);">Total Hours This Week</p>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #EC4899, #F43F5E); border:none; box-shadow: 0 10px 20px rgba(236,72,153,0.2);">
+                        <h3 id="stat-month-hrs" style="color:white; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">0</h3>
+                        <p style="color:rgba(255,255,255,0.9);">Total Hours This Month</p>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #10B981, #059669); border:none; box-shadow: 0 10px 20px rgba(16,185,129,0.2);">
+                        <h3 id="stat-weekends" style="color:white; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">0</h3>
+                        <p style="color:rgba(255,255,255,0.9);">Weekend Hours (Month)</p>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #F59E0B, #D97706); border:none; box-shadow: 0 10px 20px rgba(245,158,11,0.2);">
+                        <h3 id="stat-avg" style="color:white; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">0</h3>
+                        <p style="color:rgba(255,255,255,0.9);">Avg Hours/Day (Month)</p>
+                    </div>
+                </div>
+
+                <div class="chart-container stagger-in" style="box-shadow: 0 4px 20px rgba(0,0,0,0.05); border:none;">
+                    <div class="chart-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                        <span style="font-size:1.2rem;">Hours Chart Overview</span>
+                        <select id="chart-filter" style="padding:8px 16px; border-radius:12px; border:2px solid #E5E7EB; font-family:'Inter'; outline:none; font-size:0.95rem; font-weight:600; color:var(--text-dark); cursor:pointer; background:white;" onchange="drawChart()">
+                            <option value="this-week">Daily Hours Chart (This Week)</option>
+                            <option value="this-month">Weekly Hours Chart (This Month)</option>
+                            <option value="all-time">Monthly Hours Chart (All Time)</option>
+                        </select>
+                    </div>
+                    <canvas id="hoursChart"></canvas>
+                </div>
+
+                <div class="table-container stagger-in">
+                    <div class="table-header">
+                        <h2 style="font-size:1.1rem; margin:0;">Full History</h2>
+                        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                            <select id="log-filter" style="padding:8px 16px; border-radius:8px; border:1px solid var(--border-color); font-family:'Inter'; outline:none;" onchange="loadHistoryTable()">
+                                <option value="this-week">This Week</option>
+                                <option value="this-month">This Month</option>
+                                <option value="last-month">Last Month</option>
+                                <option value="all">All Time</option>
+                            </select>
+                            <div id="actions-header" class="admin-only table-actions-group">
+                                <button class="btn" style="padding:6px 12px; font-size:0.8rem; background: linear-gradient(135deg, #EF4444, #DC2626); color:white; border:none; border-radius:20px; box-shadow:0 4px 10px rgba(239, 68, 68,0.3);" onclick="window.removeAllWorklogs()">Remove All</button>
+                                <button class="btn" style="padding:6px 12px; font-size:0.8rem; background: linear-gradient(135deg, #7C3AED, #A78BFA); color:white; border:none; border-radius:20px; box-shadow:0 4px 10px rgba(124, 58, 237,0.3);" onclick="document.getElementById('csv-file-input').click()">Import CSV</button>
+                                <button class="btn" style="padding:6px 12px; font-size:0.8rem; background: linear-gradient(135deg, #10B981, #059669); color:white; border:none; border-radius:20px; box-shadow:0 4px 10px rgba(16,185,129,0.3);" onclick="openAddLogModal()">+ New Log</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table id="history-table">
+                            <thead>
+                                <tr>
+                                    <th style="cursor:pointer;" onclick="sortTable('date')">Date ↕</th>
+                                    <th style="cursor:pointer;" onclick="sortTable('day_of_week')">Day ↕</th>
+                                    <th style="cursor:pointer;" onclick="sortTable('is_weekend')">Day Type ↕</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th style="cursor:pointer;" onclick="sortTable('total_hours')">Total Hours ↕</th>
+                                    <th style="cursor:pointer;" onclick="sortTable('status')">Status ↕</th>
+                                    <th id="actions-col-header" class="admin-only" style="text-align:right;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-body">
+                                <!-- JS injected -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="table-empty" class="empty-state" style="display:none;">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="var(--border-color)" style="margin-bottom:16px;">
+                            <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/>
+                        </svg>
+                        <p>No logs found for this period.</p>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Edit Worklog Modal -->
+    <div class="modal-overlay" id="worklog-modal">
+        <div class="modal-content" style="max-width:420px; padding: 40px; background: rgba(255,255,255,0.98); border-radius: 24px; box-shadow: var(--shadow-card), var(--shadow-inner);">
+            <button class="modal-close" onclick="closeModal('worklog-modal')">×</button>
+            <h2 style="margin-bottom: 24px; color: var(--text-dark); font-size:1.5rem; text-align:center;">Work Log Details</h2>
+            
+            <form id="worklog-form">
+                <input type="hidden" id="worklog-id">
+                
+                <div class="input-group" style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:8px; font-size:0.9rem; font-weight:600; color:var(--text-medium);">Date</label>
+                    <input type="date" id="worklog-date" required style="width:100%; padding:12px 16px; border-radius:12px; border:2px solid #E5E7EB; outline:none; font-family:'Inter'; font-size:1rem; transition:border-color 0.3s; box-sizing:border-box;">
+                </div>
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;">
+                    <div class="input-group">
+                        <label style="display:block; margin-bottom:8px; font-size:0.9rem; font-weight:600; color:var(--text-medium);">Start Time</label>
+                        <input type="time" id="worklog-start" required style="width:100%; padding:12px 16px; border-radius:12px; border:2px solid #E5E7EB; outline:none; font-family:'Inter'; font-size:1rem; transition:border-color 0.3s; box-sizing:border-box;">
+                    </div>
+                    <div class="input-group">
+                        <label style="display:block; margin-bottom:8px; font-size:0.9rem; font-weight:600; color:var(--text-medium);">End Time</label>
+                        <input type="time" id="worklog-end" required style="width:100%; padding:12px 16px; border-radius:12px; border:2px solid #E5E7EB; outline:none; font-family:'Inter'; font-size:1rem; transition:border-color 0.3s; box-sizing:border-box;">
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:8px; font-size:0.9rem; font-weight:600; color:var(--text-medium);">Total Hours</label>
+                    <input type="number" step="0.1" id="worklog-hours" required style="width:100%; padding:12px 16px; border-radius:12px; border:2px solid #E5E7EB; outline:none; font-family:'Inter'; font-size:1rem; transition:border-color 0.3s; box-sizing:border-box;">
+                </div>
+
+                <div class="input-group" style="margin-bottom:32px;">
+                    <label style="display:block; margin-bottom:8px; font-size:0.9rem; font-weight:600; color:var(--text-medium);">Status</label>
+                    <select id="worklog-status" style="width:100%; padding:12px 16px; border-radius:12px; border:2px solid #E5E7EB; outline:none; font-family:'Inter'; font-size:1rem; box-sizing:border-box; background:white; cursor:pointer;">
+                        <option value="complete">Complete</option>
+                        <option value="active">Active</option>
+                        <option value="on_break">On Break</option>
+                    </select>
+                </div>
+
+                <div style="display:flex; gap:12px;">
+                    <button type="submit" class="btn btn-primary" style="flex:2; padding:14px; font-size:1.1rem; border-radius:12px; box-shadow:var(--shadow-btn);">Save Details</button>
+                    <button type="button" class="btn" id="worklog-delete-btn" style="flex:1; background:rgba(239, 68, 68, 0.1); color:#EF4444; border:none; padding:14px; font-size:1rem; font-weight:600; border-radius:12px;" onclick="deleteWorklog()">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hidden CSV File Input -->
+    <input type="file" id="csv-file-input" accept=".csv" style="display:none;">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Scripts -->
+    <script src="js/firebase-init.js?v=5"></script>
+    <script src="js/auth.js?v=5"></script>
+    <script src="js/worklog.js?v=5"></script>
+    <script src="js/importData.js?v=1"></script>
+</body>
+</html>
