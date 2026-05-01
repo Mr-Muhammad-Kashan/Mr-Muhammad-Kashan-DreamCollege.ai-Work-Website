@@ -40,6 +40,34 @@
             text-align: center;
         }
 
+
+        /* Colorful border accents for main sections */
+        .progress-section {
+            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(249,250,251,1) 100%);
+            border-left: 6px solid #8B5CF6;
+        }
+        .chart-card:nth-child(1) {
+            border-top: 6px solid #EC4899;
+            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(253,242,248,0.5) 100%);
+        }
+        .chart-card:nth-child(2) {
+            border-top: 6px solid #06B6D4;
+            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(236,254,255,0.5) 100%);
+        }
+        .weekend-section {
+            border-right: 6px solid #F59E0B;
+            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(254,243,199,0.5) 100%);
+        }
+        .daily-table-wrap {
+            border-bottom: 6px solid #10B981;
+            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(209,250,229,0.3) 100%);
+        }
+
+        .summary-card.expected { background: linear-gradient(145deg, #ffffff, #EEF2FF); border-left: 4px solid #6366F1; }
+        .summary-card.actual { background: linear-gradient(145deg, #ffffff, #ECFDF5); border-left: 4px solid #10B981; }
+        .summary-card.overtime { background: linear-gradient(145deg, #ffffff, #FFFBEB); border-left: 4px solid #F59E0B; }
+        .summary-card.weekend { background: linear-gradient(145deg, #ffffff, #F5F3FF); border-left: 4px solid #8B5CF6; }
+
         /* ===== SUMMARY CARDS ===== */
         .report-summary {
             display: grid;
@@ -247,6 +275,11 @@
         .report-summary .summary-card:nth-child(3) { animation: fadeSlideUp 0.5s 0.3s ease both; }
         .report-summary .summary-card:nth-child(4) { animation: fadeSlideUp 0.5s 0.4s ease both; }
         @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translate3d(0, 20px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+
+        @keyframes fadeSlideUpOld {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }

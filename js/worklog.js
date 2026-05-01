@@ -362,6 +362,22 @@ function animateValue(id, start, end, duration) {
     window.requestAnimationFrame(step);
 }
 
+
+window.setChartFilter = function(val, btnEl) {
+    document.getElementById('chart-filter').value = val;
+    document.querySelectorAll('.chart-btn').forEach(btn => {
+        btn.classList.remove('active', 'btn-primary');
+        btn.style.background = 'transparent';
+        btn.style.color = 'var(--text-medium)';
+        btn.style.boxShadow = 'none';
+    });
+    btnEl.classList.add('active', 'btn-primary');
+    btnEl.style.background = 'white';
+    btnEl.style.color = 'var(--text-dark)';
+    btnEl.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+    drawChart();
+};
+
 // Chart
 function drawChart() {
     const canvas = document.getElementById('hoursChart');
@@ -466,49 +482,74 @@ function drawChart() {
             ctx.fillText(val, 30, y);
         }
         
-        // Bars
-        const numBars = labels.length;
-        const barWidth = Math.min(40, (width - 60) / numBars - 10);
-        const spacing = (width - 60 - (barWidth * numBars)) / (numBars + 1);
+        // Line chart rendering
+        const numPoints = labels.length;
+        const spacing = (width - 60) / numPoints;
+        const startX = 40 + spacing / 2;
         
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
         
+        // Draw X labels
         labels.forEach((label, i) => {
-            const x = 40 + spacing * (i+1) + barWidth * i;
-            const barH = (data[i] / maxVal) * (height - 60) * animationProgress;
-            const y = height - 30 - barH;
-            
-            // X label
+            const x = startX + spacing * i;
             ctx.fillStyle = '#6B7280';
-            ctx.fillText(label, x + barWidth/2, height - 20);
-            
-            if (barH > 0) {
-                // Gradient
-                const grad = ctx.createLinearGradient(0, y, 0, height - 30);
-                if (filter === 'this-week' && i >= 5) {
-                    // Weekend pink
-                    grad.addColorStop(0, '#EC4899');
-                    grad.addColorStop(1, '#F9A8D4');
-                } else {
-                    grad.addColorStop(0, '#7C3AED');
-                    grad.addColorStop(1, '#A78BFA');
-                }
-                
-                ctx.fillStyle = grad;
-                
-                // Rounded top
-                const r = Math.min(8, barH);
-                ctx.beginPath();
-                ctx.moveTo(x, height - 30);
-                ctx.lineTo(x, y + r);
-                ctx.arcTo(x, y, x + r, y, r);
-                ctx.arcTo(x + barWidth, y, x + barWidth, y + r, r);
-                ctx.lineTo(x + barWidth, height - 30);
-                ctx.closePath();
-                ctx.fill();
-            }
+            ctx.fillText(label, x, height - 20);
         });
+
+        if (numPoints > 0) {
+            ctx.beginPath();
+            let firstPoint = true;
+            const points = [];
+            
+            // Calculate points
+            for (let i = 0; i < numPoints; i++) {
+                const x = startX + spacing * i;
+                const h = (data[i] / maxVal) * (height - 60) * animationProgress;
+                const y = height - 30 - h;
+                points.push({x, y, val: data[i]});
+            }
+
+            // Draw area under line
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, height - 30);
+            points.forEach(p => ctx.lineTo(p.x, p.y));
+            ctx.lineTo(points[points.length - 1].x, height - 30);
+            ctx.closePath();
+
+            const areaGrad = ctx.createLinearGradient(0, 0, 0, height - 30);
+            areaGrad.addColorStop(0, 'rgba(124, 58, 237, 0.4)');
+            areaGrad.addColorStop(1, 'rgba(124, 58, 237, 0.0)');
+            ctx.fillStyle = areaGrad;
+            ctx.fill();
+
+            // Draw line
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            for (let i = 1; i < points.length; i++) {
+                // Smooth curve (bezier) - omitted for simplicity, straight lines used
+                ctx.lineTo(points[i].x, points[i].y);
+            }
+            ctx.strokeStyle = '#7C3AED';
+            ctx.lineWidth = 4;
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+
+            // Draw dots
+            points.forEach((p, i) => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
+                
+                let dotColor = '#7C3AED';
+                if (filter === 'this-week' && i >= 5) dotColor = '#EC4899'; // Weekend pink
+                
+                ctx.fillStyle = dotColor;
+                ctx.fill();
+                ctx.strokeStyle = '#FFF';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+        }
         
         if (animationProgress < 1) {
             animationProgress += 0.05;
