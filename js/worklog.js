@@ -367,14 +367,18 @@ window.setChartFilter = function(val, btnEl) {
     document.getElementById('chart-filter').value = val;
     document.querySelectorAll('.chart-btn').forEach(btn => {
         btn.classList.remove('active', 'btn-primary');
-        btn.style.background = 'transparent';
-        btn.style.color = 'var(--text-medium)';
-        btn.style.boxShadow = 'none';
+        btn.style.background = 'white';
+        btn.style.color = 'var(--primary)';
+        btn.style.border = '2px solid var(--primary)';
+        btn.style.boxShadow = '0 4px 0 #E5E7EB, 0 4px 6px rgba(0,0,0,0.05)';
+        btn.style.transform = 'translateY(0)';
     });
     btnEl.classList.add('active', 'btn-primary');
-    btnEl.style.background = 'white';
-    btnEl.style.color = 'var(--text-dark)';
-    btnEl.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+    btnEl.style.background = 'linear-gradient(135deg, #8B5CF6, #6D28D9)';
+    btnEl.style.color = 'white';
+    btnEl.style.border = 'none';
+    btnEl.style.boxShadow = '0 4px 0 #4C1D95, 0 8px 16px rgba(109, 40, 217, 0.3)';
+    btnEl.style.transform = 'translateY(-2px)';
     drawChart();
 };
 
