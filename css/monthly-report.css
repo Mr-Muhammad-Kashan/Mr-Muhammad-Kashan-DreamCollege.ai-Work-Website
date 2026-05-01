@@ -455,3 +455,19 @@
                 transition: none;
             }
         }
+
+/* --- Monthly Report Mobile Tweaks --- */
+@media (max-width: 768px) {
+  .mr-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .mr-card {
+    padding: 16px !important;
+  }
+  .mr-table-container {
+    overflow-x: auto;
+  }
+  .mr-table {
+    min-width: 500px;
+  }
+}

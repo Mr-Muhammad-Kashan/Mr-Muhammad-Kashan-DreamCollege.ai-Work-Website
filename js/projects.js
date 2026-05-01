@@ -357,7 +357,7 @@ function renderVersions(versions) {
 
         let extraStyles = "";
         if (index === 0) {
-            extraStyles = "border: 2px solid var(--primary); background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(236, 72, 153, 0.05)); box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15); transform: translateY(-2px);";
+            extraStyles = "border: 2px solid var(--primary); background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.1); transform: translateY(-1px);";
         } else {
             extraStyles = "border: 1px solid #E5E7EB; background: #F9FAFB; opacity: 0.9; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); filter: grayscale(20%);";
         }
