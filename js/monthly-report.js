@@ -127,13 +127,27 @@ function parseLocalDate(dateStr) {
 
 // ============ HELPER: Count weekdays in a month ============
 function countWeekdays(year, month) {
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const now = new Date();
+    const isCurrentMonth = (now.getFullYear() === year && now.getMonth() === month);
+
+    // If it's the current month, only count expected days up to today
+    const endDay = isCurrentMonth ? now.getDate() : new Date(year, month + 1, 0).getDate();
+
     let weekdays = 0;
-    for (let d = 1; d <= daysInMonth; d++) {
+    for (let d = 1; d <= endDay; d++) {
         const day = new Date(year, month, d).getDay();
         if (day !== 0 && day !== 6) weekdays++;
     }
-    return weekdays;
+
+    // Let's also return total weekdays in month for the progress bar text if needed
+    let totalWeekdays = 0;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    for (let d = 1; d <= daysInMonth; d++) {
+        const day = new Date(year, month, d).getDay();
+        if (day !== 0 && day !== 6) totalWeekdays++;
+    }
+
+    return { passed: weekdays, total: totalWeekdays };
 }
 
 // ============ MAIN RENDER ============
@@ -144,8 +158,9 @@ function renderReport() {
     updateNavButtons();
 
     // ---- CALCULATIONS ----
-    const weekdays = countWeekdays(reportYear, reportMonth);
-    const expectedHours = weekdays * 8;
+    const weekdaysInfo = countWeekdays(reportYear, reportMonth);
+    const expectedHours = weekdaysInfo.passed * 8;
+    const totalExpectedHoursInMonth = weekdaysInfo.total * 8;
     const daysInMonth = new Date(reportYear, reportMonth + 1, 0).getDate();
 
     let totalActual = 0;
@@ -183,7 +198,7 @@ function renderReport() {
 
     // ---- SUMMARY CARDS ----
     document.getElementById('expected-hours').textContent = expectedHours.toFixed(1);
-    document.getElementById('expected-sub').textContent = `${weekdays} weekdays × 8 hrs/day`;
+    document.getElementById('expected-sub').textContent = `Target so far: ${weekdaysInfo.passed} weekdays × 8 hrs/day`;
 
     document.getElementById('actual-hours').textContent = totalActual.toFixed(1);
     document.getElementById('actual-sub').textContent = `${daysWorked} weekday${daysWorked !== 1 ? 's' : ''} worked · Avg ${avgPerDay.toFixed(1)} hrs/day`;
@@ -279,7 +294,7 @@ function renderReport() {
             }
         }
     }
-    document.getElementById('progress-target').textContent = `Target: ${expectedHours} hrs`;
+    document.getElementById('progress-target').textContent = `Target so far: ${expectedHours} hrs (Total month: ${totalExpectedHoursInMonth} hrs)`;
 
     // ---- DAILY CHART ----
     drawDailyChart(dailyMap, daysInMonth);
