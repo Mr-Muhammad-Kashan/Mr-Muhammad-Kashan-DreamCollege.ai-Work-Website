@@ -872,3 +872,40 @@ main.content {
     width: 100%;
   }
 }
+
+/* 3D and Hover Overhaul */
+.card, .stat-card, .project-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover, .stat-card:hover, .project-card:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.btn {
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+}
+
+.monthly-report-section {
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    background: #fff;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.monthly-report-section:nth-child(even) {
+    background: #fcfcfc;
+}
+
+.chart-container-styled {
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08) !important;
+}
