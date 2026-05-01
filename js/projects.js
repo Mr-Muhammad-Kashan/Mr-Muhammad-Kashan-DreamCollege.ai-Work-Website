@@ -493,3 +493,25 @@ function openLightbox(url) {
     document.getElementById('lightbox-img').src = url;
     openModal('lightbox-modal');
 }
+
+window.handleSearchInput = function() {
+    const input = document.getElementById('project-search');
+    const searchIcon = document.getElementById('search-icon');
+    const clearIcon = document.getElementById('clear-icon');
+
+    if (input.value.length > 0) {
+        searchIcon.style.display = 'none';
+        clearIcon.style.display = 'block';
+    } else {
+        searchIcon.style.display = 'block';
+        clearIcon.style.display = 'none';
+    }
+
+    renderProjects();
+};
+
+window.clearProjectSearch = function() {
+    const input = document.getElementById('project-search');
+    input.value = '';
+    handleSearchInput();
+};
