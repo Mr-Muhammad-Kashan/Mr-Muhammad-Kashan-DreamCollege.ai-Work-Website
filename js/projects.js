@@ -354,13 +354,21 @@ function renderVersions(versions) {
             </button>
         ` : '';
 
+
+        let extraStyles = "";
+        if (index === 0) {
+            extraStyles = "border: 2px solid var(--primary); background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(236, 72, 153, 0.05)); box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15); transform: translateY(-2px);";
+        } else {
+            extraStyles = "border: 1px solid #E5E7EB; background: #F9FAFB; opacity: 0.9; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); filter: grayscale(20%);";
+        }
+
         const html = `
-            <li class="version-item">
+            <li class="version-item" style="${extraStyles}">
                 <div class="version-head d-flex flex-column gap-1">
                     <div class="version-title">
-                        <strong class="version-label-text">${v.label}</strong>
+                        <strong class="version-label-text" style="${index === 0 ? 'color: var(--primary); font-size: 1.05rem;' : 'color: #6B7280;'}">${v.label}</strong>
                     </div>
-                    <div class="version-date">Uploaded: ${d}</div>
+                    <div class="version-date" style="${index === 0 ? 'color: var(--text-dark);' : ''}">Uploaded: ${d}</div>
                 </div>
                 <div class="version-actions-row">
                     <div class="version-actions">
@@ -368,7 +376,7 @@ function renderVersions(versions) {
                         <button onclick="copyToClipboard('${v.url}')">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle; margin-right:4px;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>Copy
                         </button>
-                        <button onclick="window.open('${v.url}', '_blank')">
+                        <button onclick="window.open('${v.url}', '_blank')" style="${index === 0 ? 'background: var(--primary); color: white; border: none; box-shadow: 0 4px 10px rgba(124,58,237,0.3);' : ''}">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle; margin-right:4px;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>Open
                         </button>
                     </div>

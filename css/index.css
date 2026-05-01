@@ -40,6 +40,13 @@
         @keyframes popIn {
             to {
                 opacity: 1;
+                transform: scale(1) translateZ(0);
+            }
+        }
+
+        @keyframes popInOld {
+            to {
+                opacity: 1;
                 transform: scale(1);
             }
         }

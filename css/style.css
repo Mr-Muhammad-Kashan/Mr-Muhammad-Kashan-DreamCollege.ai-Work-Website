@@ -53,6 +53,7 @@ body {
     radial-gradient(at 100% 0%, hsla(339,49%,30%,0.03) 0, transparent 50%);
   color: var(--text-dark);
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   min-height: 100vh;
 }
 
@@ -65,7 +66,7 @@ a, button, .btn, .card, .task-card, .project-card, .filter-pill, .mobile-tab,
 .icon-btn, .nav-links a, .logout-btn, .notification-bell, .stat-card,
 .modal-overlay, .modal-content, .toast, .greeting-text, .badge,
 .hero-avatar, input, textarea, select {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Canvas removed */
@@ -83,6 +84,7 @@ a, button, .btn, .card, .task-card, .project-card, .filter-pill, .mobile-tab,
 }
 
 .stagger-in {
+  will-change: opacity, transform;
   opacity: 0;
   animation: fadeIn 0.4s ease forwards;
 }
@@ -336,6 +338,7 @@ main.content {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Components */
@@ -616,6 +619,7 @@ main.content {
 
 /* Mobile Sidebar Backdrop */
 .sidebar-backdrop {
+  pointer-events: none;
   display: none;
   position: fixed;
   top: 0;
@@ -629,6 +633,7 @@ main.content {
 }
 
 .sidebar-backdrop.active {
+  pointer-events: auto;
   opacity: 1;
 }
 

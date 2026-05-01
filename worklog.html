@@ -3,7 +3,8 @@
 <html lang="en">
 <head>
     <link rel="icon" type="image/png" href="https://i.ibb.co/3s6hB8w/kashan.jpg">
-    <meta charset="UTF-8">
+
+        <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Work Log - Kashan's Portfolio</title>
     
@@ -76,11 +77,12 @@
                 <div class="chart-container stagger-in" style="box-shadow: 0 4px 20px rgba(0,0,0,0.05); border:none;">
                     <div class="chart-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
                         <span style="font-size:1.2rem;">Hours Chart Overview</span>
-                        <select id="chart-filter" style="padding:8px 16px; border-radius:12px; border:2px solid #E5E7EB; font-family:'Inter'; outline:none; font-size:0.95rem; font-weight:600; color:var(--text-dark); cursor:pointer; background:white;" onchange="drawChart()">
-                            <option value="this-week">Daily Hours Chart (This Week)</option>
-                            <option value="this-month">Weekly Hours Chart (This Month)</option>
-                            <option value="all-time">Monthly Hours Chart (All Time)</option>
-                        </select>
+                        <div class="chart-filter-btns" style="display:flex; gap:8px; flex-wrap:wrap; background:#F3F4F6; padding:4px; border-radius:12px;">
+                            <button class="btn chart-btn active" onclick="setChartFilter('this-week', this)">Daily Hours (This Week)</button>
+                            <button class="btn chart-btn" onclick="setChartFilter('this-month', this)">Weekly Hours (This Month)</button>
+                            <button class="btn chart-btn" onclick="setChartFilter('all-time', this)">Monthly Hours (All Time)</button>
+                        </div>
+                        <input type="hidden" id="chart-filter" value="this-week">
                     </div>
                     <canvas id="hoursChart"></canvas>
                 </div>
